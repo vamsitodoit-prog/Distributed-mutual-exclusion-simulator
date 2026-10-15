@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: distributed-mutex-simulator
+    runtime: static
+    rootDir: mutex-simulator
+    buildCommand: npm test
+    staticPublishPath: ./public
