@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Distributed Mutual Exclusion Simulator</title>
+<meta name="description" content="Interactive simulator of Centralized, Lamport, Ricart–Agrawala, Token Ring and Suzuki–Kasami mutual exclusion algorithms.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="label">Distributed systems lab</div>
+      <h1>Distributed Mutual Exclusion Simulator</h1>
+      <p class="sub">Watch N processes compete for one critical section over an asynchronous network. Tap a process to make it request entry, or let random load drive the run.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="Algorithm" id="tabs"></div>
+  </header>
+
+  <div class="main">
+    <div class="panel">
+      <div class="stage-wrap">
+        <canvas id="stage" aria-label="Process network"></canvas>
+        <div class="legend" id="legend"></div>
+        <div class="stage-hint">Tap an idle process to request the critical section</div>
+      </div>
+      <div class="controls">
+        <div class="group">
+          <button class="btn primary" id="btnPlay">Pause</button>
+          <button class="btn" id="btnStep" title="Advance to the next event">Step</button>
+          <button class="btn" id="btnReset">Reset</button>
+          <button class="btn" id="btnBurst" title="Every idle process requests at once">All request</button>
+        </div>
+        <div class="group">
+          <span class="label">Processes</span>
+          <div class="stepper"><button id="nMinus" aria-label="Fewer processes">−</button><output id="nVal">5</output><button id="nPlus" aria-label="More processes">+</button></div>
+        </div>
+        <div class="group">
+          <label class="label" for="speed">Speed</label>
+          <input type="range" id="speed" min="0" max="6" step="1" value="3">
+          <span class="val" id="speedVal">1×</span>
+        </div>
+        <div class="group">
+          <label class="label" for="lat">Delay T</label>
+          <input type="range" id="lat" min="1" max="8" step="0.5" value="3">
+          <span class="val" id="latVal">3.0</span>
+        </div>
+        <div class="group">
+          <span class="label">Load</span>
+          <div class="seg" id="load">
+            <button data-rate="0" aria-pressed="false">Off</button>
+            <button data-rate="0.025" aria-pressed="true">Light</button>
+            <button data-rate="0.07" aria-pressed="false">Busy</button>
+            <button data-rate="0.4" aria-pressed="false">Saturated</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="side">
+      <section class="panel sec">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+          <h2>Readouts</h2><span class="label" id="clock">t = 0.0</span>
+        </div>
+        <div class="safety" id="safety"><span class="dot"></span><span></span></div>
+        <div class="metrics">
+          <div class="metric"><div class="label">CS entries</div><div class="num" id="mEntries">0</div><div class="cmp" id="mThroughput">—</div></div>
+          <div class="metric"><div class="label">Msgs / entry</div><div class="num" id="mPer">—</div><div class="cmp" id="mTheory">theory —</div></div>
+          <div class="metric"><div class="label">Avg wait</div><div class="num" id="mWait">—</div><div class="cmp" id="mDelay">sync —</div></div>
+        </div>
+        <div class="bars" id="bars"></div>
+      </section>
+
+      <section class="panel sec">
+        <h2>Processes</h2>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Proc</th><th>State</th><th>Clock</th><th id="detailHead">Detail</th><th></th></tr></thead>
+            <tbody id="tbody"></tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div class="lower">
+    <section class="panel sec">
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+        <h2>Timeline</h2>
+        <div class="gantt-key"><span><i style="background:var(--want);opacity:.4"></i>waiting</span><span><i style="background:var(--held)"></i>in critical section</span></div>
+      </div>
+      <canvas id="gantt" aria-label="Per-process timeline"></canvas>
+    </section>
+    <section class="panel sec">
+      <h2>Event log</h2>
+      <ul id="log"></ul>
+    </section>
+  </div>
+
+  <section class="panel sec info" id="info"></section>
+</div>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

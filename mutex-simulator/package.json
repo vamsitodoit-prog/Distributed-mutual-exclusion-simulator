@@ -1,0 +1,15 @@
+{
+  "name": "distributed-mutex-simulator",
+  "version": "1.0.0",
+  "description": "Interactive simulator for distributed mutual exclusion algorithms: Centralized, Lamport, Ricart–Agrawala, Token Ring and Suzuki–Kasami.",
+  "private": true,
+  "license": "MIT",
+  "engines": { "node": ">=18" },
+  "scripts": {
+    "start": "npx --yes serve@14.2.4 public -l ${PORT:-3000}",
+    "dev": "npx --yes serve@14.2.4 public -l 3000",
+    "test": "node --test tests/engine.test.js",
+    "build": "node --test tests/engine.test.js"
+  },
+  "keywords": ["distributed-systems", "mutual-exclusion", "lamport", "ricart-agrawala", "suzuki-kasami", "token-ring", "simulation"]
+}
